@@ -32,7 +32,6 @@ App shell: `src/QuizMasterApp.jsx`. API helpers: `src/lib/api.js`.
 - **Empty / cold start:** Suggested prompts in chat until the first user message.  
 - **Details:** Auto-scroll, autofocus on chat open, Enter to send / Shift+Enter for newline.
 
-If you keep a demo script or rubric notes in this repo, you can add a `FRONTEND_THINKING_DEMO.md` at the root with shot-by-shot Loom ideas.
 
 ## Configuration
 
@@ -66,5 +65,5 @@ npm run preview  # preview production build
 
 ## Demo
 
-- **Live app:** (add your Vercel or static host URL)  
-- **Backend repo:** (link to your API repo)
+- **Live app:** ([Vercel url](https://quiz-chatbot-frontend-green.vercel.app/))  
+- **Backend repo:** ([Backend repo](https://github.com/Shiva082002/quiz-chatbot-backend))
