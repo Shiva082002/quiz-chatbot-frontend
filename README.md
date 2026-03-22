@@ -1,6 +1,6 @@
-# Thinkly — Frontend (Quiz Master)
+#  Frontend (Quiz Master)
 
-React (Vite) client for **Thinkly**: landing, batched quiz, results, saved sessions, and a **topic tutor** chat. The API lives in a **separate backend repository**; set `VITE_API_BASE_URL` to that server’s origin.
+React (Vite) client : landing, batched quiz, results, saved sessions, and a **topic tutor** chat. The API lives in a **separate backend repository**; set `VITE_API_BASE_URL` to that server’s origin.
 
 ## Why this topic
 
