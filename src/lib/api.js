@@ -57,7 +57,7 @@ export async function saveQuizSession(payload) {
   return data
 }
 
-/** Paginated saved sessions from MongoDB (newest first). */
+/** Paginated saved sessions. Response includes mongoConfigured + querySucceeded (retry if false). */
 export async function fetchQuizSessions({ offset = 0, limit = 5 } = {}) {
   const params = new URLSearchParams({
     offset: String(offset),

@@ -55,7 +55,9 @@ export default function Results({
       <div className="w-full rounded-xl border border-slate-200 bg-white/60 p-6 shadow-sm backdrop-blur dark:border-slate-800 dark:bg-white/5">
         <h2 className="text-center text-2xl font-semibold">Quiz Results</h2>
         {fromHistory ? (
-          <p className="mt-2 text-center text-xs text-slate-500 dark:text-slate-400">Saved session — same review as when you finished</p>
+          <p className="mt-2 text-center text-xs text-slate-500 dark:text-slate-400">
+            Saved session — same review as when you finished
+          </p>
         ) : null}
 
         {!isTextMode ? (

@@ -14,7 +14,6 @@ export default function QuizMasterApp() {
   const [quizReview, setQuizReview] = useState([])
   const [chatTopic, setChatTopic] = useState('')
   const [resultsFromHistory, setResultsFromHistory] = useState(false)
-  /** When set, overrides maxScore for Results (saved session). Cleared after live quiz. */
   const [sessionMaxScore, setSessionMaxScore] = useState(null)
   const activeQuizRef = useRef(null)
 
@@ -75,7 +74,9 @@ export default function QuizMasterApp() {
     } else {
       const ts = doc.totalScore
       setFinalScore(ts != null && Number.isFinite(Number(ts)) ? Number(ts) : 0)
-      setSessionMaxScore(doc.maxScore != null && Number.isFinite(Number(doc.maxScore)) ? Number(doc.maxScore) : list.length)
+      setSessionMaxScore(
+        doc.maxScore != null && Number.isFinite(Number(doc.maxScore)) ? Number(doc.maxScore) : list.length,
+      )
     }
     setQuizReview(list)
     setStage('results')
@@ -140,4 +141,3 @@ export default function QuizMasterApp() {
     </div>
   )
 }
-

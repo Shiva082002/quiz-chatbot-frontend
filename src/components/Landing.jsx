@@ -32,7 +32,8 @@ export default function Landing({ onStart, onChat }) {
       <div className="text-center">
         <h1 className="text-4xl font-semibold tracking-tight">Quiz Master</h1>
         <p className="mt-2 text-sm text-slate-500">
-          Pick a topic, difficulty, question type, and how many questions to answer (default 20).
+          Pick a topic, difficulty, question type, and how many questions to answer (default 20). After a run, chat
+          with a topic tutor or reopen a saved session below.
         </p>
       </div>
 

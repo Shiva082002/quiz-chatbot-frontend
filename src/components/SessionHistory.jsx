@@ -33,18 +33,31 @@ export default function SessionHistory({ onOpenSession }) {
   const [sessions, setSessions] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  /** Backend set this false when Mongo is configured but list failed (stale connection, Atlas blip, etc.) */
+  const [queryFailed, setQueryFailed] = useState(false)
+  const [mongoConfigured, setMongoConfigured] = useState(false)
 
   const load = useCallback(async () => {
     setLoading(true)
     setError('')
+    setQueryFailed(false)
     try {
       const data = await fetchQuizSessions({ offset, limit: PAGE_SIZE })
       setSessions(data.sessions || [])
       setTotal(Number(data.total) || 0)
-    } catch {
+      setMongoConfigured(Boolean(data.mongoConfigured))
+      if (data.mongoConfigured && data.querySucceeded === false) {
+        setQueryFailed(true)
+        setError(
+          'Could not reach MongoDB this time (common on serverless). Tap Try again — the server will reconnect.',
+        )
+      }
+    } catch (e) {
       setSessions([])
       setTotal(0)
-      setError('Could not load sessions. Is the backend running and MongoDB configured?')
+      setMongoConfigured(false)
+      setQueryFailed(true)
+      setError(e?.message || 'Could not load sessions. Is the backend running?')
     } finally {
       setLoading(false)
     }
@@ -105,21 +118,34 @@ export default function SessionHistory({ onOpenSession }) {
         </div>
       </div>
 
-      {/* <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-        {total > 0
-          ? `Showing ${pageStart}–${pageEnd} of ${total} (newest first). Tap a row to open full results.`
-          : 'Sessions are stored when you finish a quiz and MongoDB is configured on the backend.'}
-      </p> */}
+      <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+        {!mongoConfigured && !loading && !error
+          ? 'No MongoDB URL on the server — sessions are not stored.'
+          : total > 0
+            ? `Showing ${pageStart}–${pageEnd} of ${total} (newest first). Tap a row for full results.`
+            : 'Sessions appear here after you finish a quiz (when MongoDB is configured).'}
+      </p>
 
       {error ? (
-        <p className="mt-3 text-sm text-amber-800 dark:text-amber-200">{error}</p>
+        <div className="mt-3 space-y-2 rounded-lg border border-amber-500/50 bg-amber-50 px-4 py-3 text-sm text-amber-950 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-100">
+          <p>{error}</p>
+          {queryFailed ? (
+            <button
+              type="button"
+              onClick={() => load()}
+              className="rounded-lg bg-purple-600 px-4 py-2 text-xs font-semibold text-white hover:bg-purple-700"
+            >
+              Try again
+            </button>
+          ) : null}
+        </div>
       ) : null}
 
       {loading ? (
         <p className="mt-4 text-center text-sm text-slate-500 dark:text-slate-400">Loading sessions…</p>
-      ) : sessions.length === 0 ? (
+      ) : !error && sessions.length === 0 && mongoConfigured ? (
         <p className="mt-4 text-center text-sm text-slate-600 dark:text-slate-300">No saved sessions yet.</p>
-      ) : (
+      ) : !loading && sessions.length > 0 ? (
         <ul className="mt-4 flex flex-col gap-2">
           {sessions.map((s) => {
             const n = Array.isArray(s.results) ? s.results.length : 0
@@ -157,7 +183,7 @@ export default function SessionHistory({ onOpenSession }) {
             )
           })}
         </ul>
-      )}
+      ) : null}
     </section>
   )
 }
